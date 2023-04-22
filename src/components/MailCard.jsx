@@ -6,7 +6,9 @@ export default function MailCard({ mail }) {
   const { dispatch } = useMails();
   return (
     <section className="mail-card">
-      <h3>{subject}</h3>
+      <h3>
+        {mId} {subject}
+      </h3>
       <small>{content}</small>
       <button onClick={() => dispatch({ type: "STAR", payload: mId })}>
         {isStarred ? "starred" : "star"}

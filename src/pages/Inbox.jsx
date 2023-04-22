@@ -8,11 +8,13 @@ export default function Inbox() {
   const {
     mails: { allMails },
   } = useMails();
+  const [filteredMails, setFilteredMails] = useState(allMails);
+
   return (
     <section>
-      <FilterMails />
+      <FilterMails setFilteredMails={setFilteredMails} />
       <section className="emails-section">
-        {allMails.map((mail) => (
+        {filteredMails.map((mail) => (
           <MailCard key={mail.mId} mail={mail} />
         ))}
       </section>

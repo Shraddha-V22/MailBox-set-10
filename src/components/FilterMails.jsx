@@ -2,16 +2,26 @@ import { useState } from "react";
 import { useMails } from "../contexts/MailContext";
 import { useEffect } from "react";
 
-export default function FilterMails() {
+export default function FilterMails({ setFilteredMails }) {
   const [filterInput, setFilterInput] = useState({
     unread: false,
     starred: false,
   });
-  const { dispatch } = useMails();
+  const { mails } = useMails();
 
   useEffect(() => {
-    dispatch({ type: "FILTER", payload: filterInput });
-  }, [filterInput]);
+    let temp;
+    if (!filterInput.unread && !filterInput.starred) {
+      temp = mails.allMails;
+    } else if (filterInput.unread && filterInput.starred) {
+      temp = mails.allMails.filter((mail) => mail.unread && mail.isStarred);
+    } else if (filterInput.unread) {
+      temp = mails.allMails.filter((mail) => mail.unread);
+    } else if (filterInput.starred) {
+      temp = mails.allMails.filter((mail) => mail.isStarred);
+    }
+    setFilteredMails(temp);
+  }, [mails, filterInput]);
 
   const filterInputHandler = (e) => {
     const { name, checked } = e.target;

@@ -1,19 +1,5 @@
-import { mails as mailsData } from "../data/mailData";
-
 export const mailReducer = (state, { type, payload }) => {
   switch (type) {
-    case "FILTER":
-      let temp;
-      if (!payload.unread && !payload.starred) {
-        temp = mailsData;
-      } else if (payload.unread && payload.starred) {
-        temp = mailsData.filter((mail) => mail.unread && mail.isStarred);
-      } else if (payload.unread) {
-        temp = mailsData.filter((mail) => mail.unread);
-      } else if (payload.starred) {
-        temp = mailsData.filter((mail) => mail.isStarred);
-      }
-      return { ...state, allMails: temp };
     case "STAR":
       return {
         ...state,
