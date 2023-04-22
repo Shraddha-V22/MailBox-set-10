@@ -1,0 +1,74 @@
+/* #root { */
+/* max-width: 1280px; */
+/* margin: 0 auto; */
+/* padding: 2rem; */
+/* text-align: center; */
+/* } */
+*,
+*::after,
+*::before {
+  margin: 0;
+  /* padding: 0; */
+  box-sizing: border-box;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "header header" "aside main";
+}
+
+.header {
+  grid-area: header;
+  /* background-color: #888; */
+  border-bottom: 1px solid;
+  padding: 1rem;
+}
+
+.aside {
+  grid-area: aside;
+  /* background-color: coral; */
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem;
+  gap: 1rem;
+  font-size: 1.2rem;
+  border-right: 1px solid;
+}
+
+aside a {
+  color: initial;
+}
+
+.main {
+  grid-area: main;
+  /* background-color: #121212; */
+}
+
+.filter-mail {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid;
+}
+
+.filter-mail input {
+  margin-right: 0.2rem;
+}
+
+.emails-section {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mail-card {
+  border: 1px solid;
+  padding: 1rem;
+}
