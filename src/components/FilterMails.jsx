@@ -3,29 +3,27 @@ import { useMails } from "../contexts/MailContext";
 import { useEffect } from "react";
 
 export default function FilterMails({ setFilteredMails }) {
-  const [filterInput, setFilterInput] = useState({
-    unread: false,
-    starred: false,
-  });
+  const [filterInput, setFilterInput] = useState([]);
   const { mails } = useMails();
 
   useEffect(() => {
     let temp;
-    if (!filterInput.unread && !filterInput.starred) {
-      temp = mails.allMails;
-    } else if (filterInput.unread && filterInput.starred) {
-      temp = mails.allMails.filter((mail) => mail.unread && mail.isStarred);
-    } else if (filterInput.unread) {
-      temp = mails.allMails.filter((mail) => mail.unread);
-    } else if (filterInput.starred) {
-      temp = mails.allMails.filter((mail) => mail.isStarred);
-    }
+    temp = mails.allMails.filter((mail) => {
+      for (let i = 0; i < filterInput.length; i++) {
+        if (!mail[filterInput[i]]) return false;
+      }
+      return true;
+    });
     setFilteredMails(temp);
   }, [mails, filterInput]);
 
   const filterInputHandler = (e) => {
     const { name, checked } = e.target;
-    setFilterInput((prev) => ({ ...prev, [name]: checked }));
+    if (checked) {
+      setFilterInput((prev) => [...prev, name]);
+    } else {
+      setFilterInput((prev) => prev.filter((item) => item !== name));
+    }
   };
 
   return (
@@ -43,7 +41,7 @@ export default function FilterMails({ setFilteredMails }) {
       <div>
         <input
           type="checkbox"
-          name="starred"
+          name="isStarred"
           id="starred"
           onClick={filterInputHandler}
         />
