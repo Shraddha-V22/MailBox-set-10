@@ -1,5 +1,6 @@
 import React from "react";
 import { useMails } from "../contexts/MailContext";
+import { Link } from "react-router-dom";
 
 export default function MailCard({ mail }) {
   const { mId, subject, content, isStarred, unread } = mail;
@@ -10,6 +11,7 @@ export default function MailCard({ mail }) {
         {mId} {subject}
       </h3>
       <small>{content}</small>
+      <Link to={`/mail/${mId}`}>View details</Link>
       <button onClick={() => dispatch({ type: "STAR", payload: mId })}>
         {isStarred ? "starred" : "star"}
       </button>

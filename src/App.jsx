@@ -5,6 +5,7 @@ import Spam from "./pages/Spam";
 import Trash from "./pages/Trash";
 import Aside from "./components/Aside";
 import Header from "./components/Header";
+import MailDetails from "./pages/MailDetails";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <section className="main">
         <Routes>
           <Route path="/" element={<Inbox />} />
+          <Route path="/mail/:mailId" element={<MailDetails />} />
           <Route path="/spam" element={<Spam />} />
           <Route path="/trash" element={<Trash />} />
         </Routes>
