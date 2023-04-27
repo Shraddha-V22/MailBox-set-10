@@ -32,6 +32,20 @@ export const mailReducer = (state, { type, payload }) => {
           mail.mId === payload ? { ...mail, unread: false } : mail
         ),
       };
+    case "FILTER":
+      let temp = [];
+      if (payload.checked) {
+        temp = [...state.filters, payload.name];
+      } else {
+        temp = state.filters.filter((item) => item !== payload.name);
+      }
+      return {
+        ...state,
+        filters: temp,
+        allMails: state.defaultMails.filter((item) =>
+          temp.every((el) => item[el])
+        ),
+      };
     default:
       return state;
   }

@@ -7,12 +7,16 @@ import { mailReducer } from "../reducers/mailReducer";
 
 const MailContext = createContext(null);
 
+const initialMails = {
+  allMails: [...mailsData],
+  trash: [],
+  spam: [],
+  filters: [],
+  defaultMails: [...mailsData],
+};
+
 export default function MailProvider({ children }) {
-  const [mails, dispatch] = useReducer(mailReducer, {
-    allMails: mailsData,
-    trash: [],
-    spam: [],
-  });
+  const [mails, dispatch] = useReducer(mailReducer, initialMails);
 
   return (
     <MailContext.Provider value={{ mails, dispatch }}>
