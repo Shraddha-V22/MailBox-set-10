@@ -7,15 +7,18 @@ export default function MailCard({ mail }) {
   const { dispatch } = useMails();
   return (
     <section className="mail-card">
-      <h3>
-        {mId} {subject}
-      </h3>
+      <h3>{subject}</h3>
       <small>{content}</small>
-      <Link to={`/mail/${mId}`}>View details</Link>
-      <button onClick={() => dispatch({ type: "STAR", payload: mId })}>
+      <button
+        onClick={() => dispatch({ type: "STAR", payload: mId })}
+        className="mail--star"
+      >
         {isStarred ? "starred" : "star"}
       </button>
-      <div>
+      <div className="mail--btns">
+        <Link to={`/mail/${mId}`} class="mail--details-link">
+          View details
+        </Link>
         <button onClick={() => dispatch({ type: "DELETE", payload: mId })}>
           Delete
         </button>

@@ -42,9 +42,6 @@ export const mailReducer = (state, { type, payload }) => {
       return {
         ...state,
         filters: temp,
-        allMails: state.defaultMails.filter((item) =>
-          temp.every((el) => item[el])
-        ),
       };
     default:
       return state;
