@@ -15,7 +15,7 @@ export default function Inbox() {
     <section>
       <FilterMails />
       <section className="emails-section">
-        {mails.allMails.map((mail) => (
+        {mails.filteredMails.map((mail) => (
           <MailCard key={mail.mId} mail={mail} />
         ))}
       </section>

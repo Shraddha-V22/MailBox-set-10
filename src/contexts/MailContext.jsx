@@ -8,11 +8,12 @@ import { mailReducer } from "../reducers/mailReducer";
 const MailContext = createContext(null);
 
 const initialMails = {
+  defaultMails: [...mailsData],
   allMails: [...mailsData],
   trash: [],
   spam: [],
   filters: [],
-  defaultMails: [...mailsData],
+  filteredMails: [...mailsData],
 };
 
 export default function MailProvider({ children }) {

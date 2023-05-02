@@ -1,77 +1,100 @@
 export const mailReducer = (state, { type, payload }) => {
+  let tempMails = state;
   switch (type) {
     case "STAR":
-      return {
-        ...state,
-        allMails: state.allMails.map((mail) =>
+      tempMails = {
+        ...tempMails,
+        allMails: tempMails.allMails.map((mail) =>
           mail.mId === payload ? { ...mail, isStarred: !mail.isStarred } : mail
         ),
       };
+      break;
     case "DELETE":
-      console.log(state.trash);
-      const deletedInInbox = state.allMails.find(({ mId }) => mId === payload);
-      const deletedInSpam = state.spam.find(({ mId }) => mId === payload);
+      const deletedInInbox = tempMails.allMails.find(
+        ({ mId }) => mId === payload
+      );
+      const deletedInSpam = tempMails.spam.find(({ mId }) => mId === payload);
 
-      return {
-        ...state,
+      tempMails = {
+        ...tempMails,
         allMails: deletedInInbox
-          ? state.allMails.filter((mail) => mail.mId !== payload)
-          : state.allMails,
+          ? tempMails.allMails.filter((mail) => mail.mId !== payload)
+          : tempMails.allMails,
         spam: deletedInSpam
-          ? state.spam.filter((mail) => mail.mId !== payload)
-          : state.spam,
+          ? tempMails.spam.filter((mail) => mail.mId !== payload)
+          : tempMails.spam,
         trash: payload.deletedPermanently
-          ? state.trash.filter(({ mId }) => mId !== payload.mId)
-          : [...state.trash, deletedInInbox ?? deletedInSpam],
+          ? tempMails.trash.filter(({ mId }) => mId !== payload.mId)
+          : [...tempMails.trash, deletedInInbox ?? deletedInSpam],
       };
+      break;
     case "SPAM":
-      return {
-        ...state,
-        allMails: state.allMails.filter((mail) => mail.mId !== payload),
+      tempMails = {
+        ...tempMails,
+        allMails: tempMails.allMails.filter((mail) => mail.mId !== payload),
         spam: [
-          ...state.spam,
-          state.allMails.find((mail) => mail.mId === payload),
+          ...tempMails.spam,
+          tempMails.allMails.find((mail) => mail.mId === payload),
         ],
       };
+      break;
     case "MARK_AS_READ":
-      return {
-        ...state,
-        allMails: state.allMails.map((mail) =>
+      tempMails = {
+        ...tempMails,
+        allMails: tempMails.allMails.map((mail) =>
           mail.mId === payload ? { ...mail, unread: !mail.unread } : mail
         ),
       };
+      break;
     case "RECOVER_MAIL":
       let recoveredMail =
-        state.spam.find(({ mId }) => mId === payload) ??
-        state.trash.find(({ mId }) => mId === payload);
-      let mailOgIndex = state.defaultMails.findIndex(
+        tempMails.spam.find(({ mId }) => mId === payload) ??
+        tempMails.trash.find(({ mId }) => mId === payload);
+      let mailOgIndex = tempMails.defaultMails.findIndex(
         ({ mId }) => mId === recoveredMail.mId
       );
 
-      !state.allMails.find(({ mId }) => mId === payload) &&
-        state.allMails.splice(mailOgIndex, 0, recoveredMail);
+      !tempMails.allMails.find(({ mId }) => mId === payload) &&
+        tempMails.allMails.splice(mailOgIndex, 0, recoveredMail);
 
-      return {
-        ...state,
-        trash: state.trash.find(({ mId }) => mId === payload)
-          ? state.trash.filter(({ mId }) => mId !== payload)
-          : state.trash,
-        spam: state.spam.find(({ mId }) => mId === payload)
-          ? state.spam.filter(({ mId }) => mId !== payload)
-          : state.spam,
+      tempMails = {
+        ...tempMails,
+        trash: tempMails.trash.find(({ mId }) => mId === payload)
+          ? tempMails.trash.filter(({ mId }) => mId !== payload)
+          : tempMails.trash,
+        spam: tempMails.spam.find(({ mId }) => mId === payload)
+          ? tempMails.spam.filter(({ mId }) => mId !== payload)
+          : tempMails.spam,
       };
+      break;
     case "FILTER":
       let temp = [];
       if (payload.checked) {
         temp = [...state.filters, payload.name];
       } else {
-        temp = state.filters.filter((item) => item !== payload.name);
+        temp = tempMails.filters.filter((item) => item !== payload.name);
       }
-      return {
+      tempMails = {
         ...state,
         filters: temp,
       };
+      break;
     default:
-      return state;
+      break;
   }
+
+  if (tempMails.filters.length > 0) {
+    tempMails = {
+      ...tempMails,
+      filteredMails: tempMails.allMails.filter((mail) =>
+        tempMails.filters.every((el) => mail[el])
+      ),
+    };
+  } else {
+    tempMails = {
+      ...tempMails,
+      filteredMails: tempMails.allMails,
+    };
+  }
+  return tempMails;
 };
