@@ -6,16 +6,16 @@ import FilterMails from "../components/FilterMails";
 export default function Inbox() {
   const { mails } = useMails();
 
-  const filteredData =
-    mails.filters.length > 0
-      ? mails.allMails.filter((mail) => mails.filters.every((el) => mail[el]))
-      : mails.allMails;
+  // const filteredData =
+  //   mails.filters.length > 0
+  //     ? mails.allMails.filter((mail) => mails.filters.every((el) => mail[el]))
+  //     : mails.allMails;
 
   return (
     <section>
       <FilterMails />
       <section className="emails-section">
-        {filteredData.map((mail) => (
+        {mails.allMails.map((mail) => (
           <MailCard key={mail.mId} mail={mail} />
         ))}
       </section>

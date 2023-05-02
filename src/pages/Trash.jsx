@@ -9,7 +9,9 @@ export default function Trash() {
       <h1>Trash</h1>
       <section>
         {mails?.trash.length > 0 ? (
-          mails?.trash.map((mail) => <MailCard key={mail.mId} mail={mail} />)
+          mails?.trash.map((mail) => (
+            <MailCard key={mail.mId} mail={mail} isDeleted />
+          ))
         ) : (
           <h3>Nothing in Trash</h3>
         )}

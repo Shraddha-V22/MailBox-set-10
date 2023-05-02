@@ -8,13 +8,21 @@ export const mailReducer = (state, { type, payload }) => {
         ),
       };
     case "DELETE":
+      console.log(state.trash);
+      const deletedInInbox = state.allMails.find(({ mId }) => mId === payload);
+      const deletedInSpam = state.spam.find(({ mId }) => mId === payload);
+
       return {
         ...state,
-        allMails: state.allMails.filter((mail) => mail.mId !== payload),
-        trash: [
-          ...state.trash,
-          state.allMails.find((mail) => mail.mId === payload),
-        ],
+        allMails: deletedInInbox
+          ? state.allMails.filter((mail) => mail.mId !== payload)
+          : state.allMails,
+        spam: deletedInSpam
+          ? state.spam.filter((mail) => mail.mId !== payload)
+          : state.spam,
+        trash: payload.deletedPermanently
+          ? state.trash.filter(({ mId }) => mId !== payload.mId)
+          : [...state.trash, deletedInInbox ?? deletedInSpam],
       };
     case "SPAM":
       return {
@@ -29,8 +37,28 @@ export const mailReducer = (state, { type, payload }) => {
       return {
         ...state,
         allMails: state.allMails.map((mail) =>
-          mail.mId === payload ? { ...mail, unread: false } : mail
+          mail.mId === payload ? { ...mail, unread: !mail.unread } : mail
         ),
+      };
+    case "RECOVER_MAIL":
+      let recoveredMail =
+        state.spam.find(({ mId }) => mId === payload) ??
+        state.trash.find(({ mId }) => mId === payload);
+      let mailOgIndex = state.defaultMails.findIndex(
+        ({ mId }) => mId === recoveredMail.mId
+      );
+
+      !state.allMails.find(({ mId }) => mId === payload) &&
+        state.allMails.splice(mailOgIndex, 0, recoveredMail);
+
+      return {
+        ...state,
+        trash: state.trash.find(({ mId }) => mId === payload)
+          ? state.trash.filter(({ mId }) => mId !== payload)
+          : state.trash,
+        spam: state.spam.find(({ mId }) => mId === payload)
+          ? state.spam.filter(({ mId }) => mId !== payload)
+          : state.spam,
       };
     case "FILTER":
       let temp = [];

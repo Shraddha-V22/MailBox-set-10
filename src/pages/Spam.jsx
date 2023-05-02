@@ -9,7 +9,9 @@ export default function Spam() {
       <h1>Spam</h1>
       <section>
         {mails?.spam.length > 0 ? (
-          mails?.spam.map((mail) => <MailCard key={mail.mId} mail={mail} />)
+          mails?.spam.map((mail) => (
+            <MailCard key={mail.mId} mail={mail} isSpam />
+          ))
         ) : (
           <h3>Nothing in Spam</h3>
         )}

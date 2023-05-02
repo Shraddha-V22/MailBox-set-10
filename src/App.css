@@ -84,12 +84,12 @@ aside a {
   margin-right: auto;
 }
 
-.mail--btns button:nth-child(2) {
+.mail--btns button:nth-child(1) {
   color: red;
 }
-.mail--btns button:nth-child(3) {
+.mail--btns button:nth-child(2) {
   color: green;
 }
-.mail--btns button:nth-child(4) {
+.mail--btns button:nth-child(3) {
   color: orange;
 }
