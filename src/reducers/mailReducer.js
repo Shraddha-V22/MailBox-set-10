@@ -4,22 +4,22 @@ export const mailReducer = (state, { type, payload }) => {
     case "STAR":
       tempMails = {
         ...tempMails,
-        allMails: tempMails.allMails.map((mail) =>
+        defaultMails: tempMails.defaultMails.map((mail) =>
           mail.mId === payload ? { ...mail, isStarred: !mail.isStarred } : mail
         ),
       };
       break;
     case "DELETE":
-      const deletedInInbox = tempMails.allMails.find(
+      const deletedInInbox = tempMails.defaultMails.find(
         ({ mId }) => mId === payload
       );
       const deletedInSpam = tempMails.spam.find(({ mId }) => mId === payload);
 
       tempMails = {
         ...tempMails,
-        allMails: deletedInInbox
-          ? tempMails.allMails.filter((mail) => mail.mId !== payload)
-          : tempMails.allMails,
+        defaultMails: deletedInInbox
+          ? tempMails.defaultMails.filter((mail) => mail.mId !== payload)
+          : tempMails.defaultMails,
         spam: deletedInSpam
           ? tempMails.spam.filter((mail) => mail.mId !== payload)
           : tempMails.spam,
@@ -31,38 +31,42 @@ export const mailReducer = (state, { type, payload }) => {
     case "SPAM":
       tempMails = {
         ...tempMails,
-        allMails: tempMails.allMails.filter((mail) => mail.mId !== payload),
+        defaultMails: tempMails.defaultMails.filter(
+          (mail) => mail.mId !== payload
+        ),
         spam: [
           ...tempMails.spam,
-          tempMails.allMails.find((mail) => mail.mId === payload),
+          tempMails.defaultMails.find((mail) => mail.mId === payload),
         ],
       };
       break;
     case "MARK_AS_READ":
       tempMails = {
         ...tempMails,
-        allMails: tempMails.allMails.map((mail) =>
+        defaultMails: tempMails.defaultMails.map((mail) =>
           mail.mId === payload ? { ...mail, unread: !mail.unread } : mail
         ),
       };
       break;
     case "RECOVER_MAIL":
-      let recoveredMail =
-        tempMails.spam.find(({ mId }) => mId === payload) ??
-        tempMails.trash.find(({ mId }) => mId === payload);
-      let mailOgIndex = tempMails.defaultMails.findIndex(
-        ({ mId }) => mId === recoveredMail.mId
-      );
+      const spamMail = tempMails.spam.find(({ mId }) => mId === payload);
+      const trashMail = tempMails.trash.find(({ mId }) => mId === payload);
+      const recoveredMail = spamMail ?? trashMail;
 
-      !tempMails.allMails.find(({ mId }) => mId === payload) &&
-        tempMails.allMails.splice(mailOgIndex, 0, recoveredMail);
+      !tempMails.defaultMails.find(({ mId }) => mId === payload) &&
+        tempMails.defaultMails.push(recoveredMail);
+
+      const tempSortedMails = tempMails.defaultMails.filter(({ mId }) =>
+        tempMails.defaultMails.find((mail) => mail.mId === mId)
+      );
 
       tempMails = {
         ...tempMails,
-        trash: tempMails.trash.find(({ mId }) => mId === payload)
+        defaultMails: tempSortedMails,
+        trash: trashMail
           ? tempMails.trash.filter(({ mId }) => mId !== payload)
           : tempMails.trash,
-        spam: tempMails.spam.find(({ mId }) => mId === payload)
+        spam: spamMail
           ? tempMails.spam.filter(({ mId }) => mId !== payload)
           : tempMails.spam,
       };
@@ -86,14 +90,14 @@ export const mailReducer = (state, { type, payload }) => {
   if (tempMails.filters.length > 0) {
     tempMails = {
       ...tempMails,
-      filteredMails: tempMails.allMails.filter((mail) =>
+      filteredMails: tempMails.defaultMails.filter((mail) =>
         tempMails.filters.every((el) => mail[el])
       ),
     };
   } else {
     tempMails = {
       ...tempMails,
-      filteredMails: tempMails.allMails,
+      filteredMails: tempMails.defaultMails,
     };
   }
   return tempMails;

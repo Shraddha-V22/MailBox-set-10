@@ -9,7 +9,6 @@ const MailContext = createContext(null);
 
 const initialMails = {
   defaultMails: [...mailsData],
-  allMails: [...mailsData],
   trash: [],
   spam: [],
   filters: [],
