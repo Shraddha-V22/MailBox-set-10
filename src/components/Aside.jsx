@@ -5,6 +5,7 @@ export default function Aside() {
 
   return (
     <aside className="aside">
+      <h1>Email</h1>
       <NavLink className={styleLink} to="/">
         Inbox
       </NavLink>

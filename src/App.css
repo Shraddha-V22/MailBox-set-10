@@ -13,13 +13,13 @@
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
-  grid-template-areas: "header header" "aside main";
+  grid-template-areas: "aside header" "aside main";
 }
 
 .header {
   grid-area: header;
-  border-bottom: 1px solid;
-  padding: 0.5rem 1rem;
+  /* border-bottom: 1px solid; */
+  /* padding: 0.5rem 1rem; */
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -35,7 +35,11 @@
   border-right: 1px solid;
 }
 
-aside a {
+.aside h1 {
+  margin-bottom: 1rem;
+}
+
+.aside a {
   color: initial;
   padding: 0.2rem 1rem;
   border-radius: 0.5rem;
@@ -49,12 +53,28 @@ aside a {
   grid-area: main;
 }
 
-.filter-mail {
+.filter-comp {
+  width: 100%;
+}
+/* 
+div.checkbox-btn {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #888;
+} */
+/* 
+input[type="checkbox"] {
+  border: 1px #000;
+} */
+
+.filter-mail,
+.select-mails {
+  width: 100%;
   display: flex;
   gap: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
   align-items: center;
-  /* border-bottom: 1px solid; */
+  border-bottom: 1px solid;
 }
 
 .filter-mail .search-input {
@@ -69,6 +89,10 @@ aside a {
 
 .filter-mail input {
   margin-right: 0.2rem;
+}
+
+.select-mails {
+  padding-left: 2rem;
 }
 
 .emails-section {
@@ -94,7 +118,8 @@ aside a {
 
 .mail-card > div.mail-title {
   display: grid;
-  grid-template-columns: auto 250px 1fr;
+  grid-template-columns: auto auto 250px 1fr;
+  align-items: center;
   gap: 1rem;
 }
 

@@ -89,6 +89,30 @@ export const mailReducer = (state, { type, payload }) => {
         filters: temp,
       };
       break;
+      c;
+    case "SELECT_MAILS":
+      // console.log(payload);
+      if (payload.name === "select-all") {
+        tempMails = {
+          ...tempMails,
+          isChecked: payload.checked,
+          defaultMails: tempMails.defaultMails.map((mail) => ({
+            ...mail,
+            isChecked: payload.checked,
+          })),
+        };
+      } else {
+        tempMails = {
+          ...tempMails,
+          defaultMails: tempMails.defaultMails.map((mail) =>
+            payload === mail.mId
+              ? { ...mail, isChecked: !mail.isChecked }
+              : mail
+          ),
+        };
+      }
+      // console.log(tempMails.defaultMails);
+      break;
     default:
       break;
   }

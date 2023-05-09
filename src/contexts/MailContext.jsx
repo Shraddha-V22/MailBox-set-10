@@ -13,6 +13,7 @@ const initialMails = {
   spam: [],
   filters: [],
   searchText: "",
+  // isChecked: false,
   filteredMails: [...mailsData],
 };
 

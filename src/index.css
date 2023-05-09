@@ -14,14 +14,15 @@ body {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.2em 0.8em;
+  border: none;
+  /* padding: 0.2em; */
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
+  background-color: transparent;
 }
-button:hover {
+/* button:hover {
   border-color: #646cff;
-}
+} */
