@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function MailCard({ mail, isSpam, isDeleted, detailed }) {
+export default function MailCard({ mail, isSpam, isDeleted }) {
   const { mId, subject, content, isStarred, unread } = mail;
   const [hovered, setHovered] = useState(false);
   const { dispatch } = useMails();
@@ -32,10 +32,17 @@ export default function MailCard({ mail, isSpam, isDeleted, detailed }) {
 
   const deleteMail = (e, permanent) => {
     e.stopPropagation();
-    console.log("clicked", e, permanent);
     dispatch({
       type: "DELETE",
       payload: !permanent ? mId : { deletedPermanently: true, mId },
+    });
+  };
+
+  const recoverMail = (e) => {
+    e.stopPropagation();
+    dispatch({
+      type: "RECOVER_MAIL",
+      payload: mId,
     });
   };
 
@@ -78,24 +85,12 @@ export default function MailCard({ mail, isSpam, isDeleted, detailed }) {
           )}
         </button>
 
-        {detailed ? (
-          <h3>{subject}</h3>
-        ) : (
-          <h3>
-            {subject.length > 100 ? subject.substr(0, 100) + "..." : subject}
-          </h3>
-        )}
-        {detailed ? (
-          <p>{content}</p>
-        ) : (
-          <p>
-            {content.length > 100 ? content.substr(0, 100) + "..." : content}
-          </p>
-        )}
+        <h3>
+          {subject.length > 100 ? subject.substr(0, 100) + "..." : subject}
+        </h3>
+        <p>{content.length > 100 ? content.substr(0, 100) + "..." : content}</p>
       </div>
-      <div
-        className={`mail--btns ${hovered && !detailed ? "" : "hide-element"}`}
-      >
+      <div className={`mail--btns ${hovered ? "" : "hide-element"}`}>
         {!isSpam && !isDeleted && (
           <div>
             <button onClick={(e) => deleteMail(e)}>
@@ -123,21 +118,13 @@ export default function MailCard({ mail, isSpam, isDeleted, detailed }) {
         )}
         {isSpam && (
           <div>
-            <button
-              onClick={() => dispatch({ type: "RECOVER_MAIL", payload: mId })}
-            >
-              Move to Inbox
-            </button>
+            <button onClick={recoverMail}>Move to Inbox</button>
             <FontAwesomeIcon icon={faTrash} title="move to trash" />
           </div>
         )}
         {isDeleted && (
           <div>
-            <button
-              onClick={() => dispatch({ type: "RECOVER_MAIL", payload: mId })}
-            >
-              Move to Inbox
-            </button>
+            <button onClick={recoverMail}>Move to Inbox</button>
             <button onClick={(e) => deleteMail(e, true)}>
               <FontAwesomeIcon icon={faTrash} title="delete permanently" />
             </button>

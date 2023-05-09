@@ -9,6 +9,12 @@
   color: #888;
 }
 
+.flex {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 .layout {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -129,7 +135,7 @@ input[type="checkbox"] {
   justify-content: space-between;
   gap: 0.5rem;
   position: absolute;
-  bottom: 0.2rem;
+  bottom: 0.3rem;
   right: 1rem;
 }
 

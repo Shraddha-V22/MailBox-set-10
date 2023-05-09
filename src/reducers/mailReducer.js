@@ -15,38 +15,85 @@ export const mailReducer = (state, { type, payload }) => {
       );
       const deletedInSpam = tempMails.spam.find(({ mId }) => mId === payload);
 
-      tempMails = {
-        ...tempMails,
-        defaultMails: deletedInInbox
-          ? tempMails.defaultMails.filter((mail) => mail.mId !== payload)
-          : tempMails.defaultMails,
-        spam: deletedInSpam
-          ? tempMails.spam.filter((mail) => mail.mId !== payload)
-          : tempMails.spam,
-        trash: payload.deletedPermanently
-          ? tempMails.trash.filter(({ mId }) => mId !== payload.mId)
-          : [...tempMails.trash, deletedInInbox ?? deletedInSpam],
-      };
+      if (payload) {
+        tempMails = {
+          ...tempMails,
+          defaultMails: deletedInInbox
+            ? tempMails.defaultMails.filter((mail) => mail.mId !== payload)
+            : tempMails.defaultMails,
+          spam: deletedInSpam
+            ? tempMails.spam.filter((mail) => mail.mId !== payload)
+            : tempMails.spam,
+          trash: payload.deletedPermanently
+            ? tempMails.trash.filter(({ mId }) => mId !== payload.mId)
+            : [...tempMails.trash, deletedInInbox ?? deletedInSpam],
+        };
+      } else {
+        tempMails = {
+          ...tempMails,
+          defaultMails: tempMails.defaultMails.filter(
+            (mail) => !mail.isChecked
+          ),
+          trash: [
+            ...tempMails.trash,
+            ...tempMails.defaultMails
+              .filter((mail) => mail.isChecked)
+              .map((mail) => ({ ...mail, isChecked: !mail.isChecked })),
+          ],
+        };
+      }
       break;
     case "SPAM":
-      tempMails = {
-        ...tempMails,
-        defaultMails: tempMails.defaultMails.filter(
-          (mail) => mail.mId !== payload
-        ),
-        spam: [
-          ...tempMails.spam,
-          tempMails.defaultMails.find((mail) => mail.mId === payload),
-        ],
-      };
+      if (payload) {
+        tempMails = {
+          ...tempMails,
+          defaultMails: tempMails.defaultMails.filter(
+            (mail) => mail.mId !== payload
+          ),
+          spam: [
+            ...tempMails.spam,
+            tempMails.defaultMails.find((mail) => mail.mId === payload),
+          ],
+        };
+      } else {
+        tempMails = {
+          ...tempMails,
+          defaultMails: tempMails.defaultMails.filter(
+            (mail) => !mail.isChecked
+          ),
+          spam: [
+            ...tempMails.spam,
+            ...tempMails.defaultMails
+              .filter((mail) => mail.isChecked)
+              .map((mail) => ({ ...mail, isChecked: !mail.isChecked })),
+          ],
+        };
+      }
       break;
     case "MARK_AS_READ":
-      tempMails = {
-        ...tempMails,
-        defaultMails: tempMails.defaultMails.map((mail) =>
-          mail.mId === payload ? { ...mail, unread: !mail.unread } : mail
-        ),
-      };
+      if (!payload.selectedMails) {
+        tempMails = {
+          ...tempMails,
+          defaultMails: tempMails.defaultMails.map((mail) =>
+            mail.mId === payload ? { ...mail, unread: !mail.unread } : mail
+          ),
+        };
+      } else {
+        tempMails = {
+          ...tempMails,
+          defaultMails: payload.selectedMails.every((mail) => !mail.unread)
+            ? tempMails.defaultMails.map((mail) =>
+                mail.isChecked
+                  ? { ...mail, unread: true, isChecked: !mail.isChecked }
+                  : mail
+              )
+            : tempMails.defaultMails.map((mail) =>
+                mail.isChecked
+                  ? { ...mail, unread: false, isChecked: !mail.isChecked }
+                  : mail
+              ),
+        };
+      }
       break;
     case "RECOVER_MAIL":
       const spamMail = tempMails.spam.find(({ mId }) => mId === payload);
