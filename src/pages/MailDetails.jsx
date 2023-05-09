@@ -6,5 +6,5 @@ import MailCard from "../components/MailCard";
 export default function MailDetails() {
   const { mailId } = useParams();
   const mail = MailsData.find((email) => email.mId === mailId);
-  return <MailCard mail={mail} />;
+  return <MailCard mail={mail} detailed />;
 }

@@ -71,15 +71,21 @@ export const mailReducer = (state, { type, payload }) => {
           : tempMails.spam,
       };
       break;
+    case "SEARCH_MAIL":
+      tempMails = {
+        ...tempMails,
+        searchText: payload,
+      };
+      break;
     case "FILTER":
       let temp = [];
       if (payload.checked) {
-        temp = [...state.filters, payload.name];
+        temp = [...tempMails.filters, payload.name];
       } else {
         temp = tempMails.filters.filter((item) => item !== payload.name);
       }
       tempMails = {
-        ...state,
+        ...tempMails,
         filters: temp,
       };
       break;
@@ -87,17 +93,33 @@ export const mailReducer = (state, { type, payload }) => {
       break;
   }
 
-  if (tempMails.filters.length > 0) {
+  if (tempMails.searchText.length) {
     tempMails = {
       ...tempMails,
-      filteredMails: tempMails.defaultMails.filter((mail) =>
-        tempMails.filters.every((el) => mail[el])
+      filteredMails: tempMails.defaultMails.filter(
+        ({ subject, content }) =>
+          subject.toLowerCase().includes(tempMails.searchText.toLowerCase()) ||
+          content.toLowerCase().includes(tempMails.searchText.toLowerCase())
       ),
     };
   } else {
     tempMails = {
       ...tempMails,
       filteredMails: tempMails.defaultMails,
+    };
+  }
+
+  if (tempMails.filters.length > 0) {
+    tempMails = {
+      ...tempMails,
+      filteredMails: tempMails.filteredMails.filter((mail) =>
+        tempMails.filters.every((el) => mail[el])
+      ),
+    };
+  } else {
+    tempMails = {
+      ...tempMails,
+      filteredMails: tempMails.filteredMails,
     };
   }
   return tempMails;

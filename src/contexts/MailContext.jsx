@@ -12,6 +12,7 @@ const initialMails = {
   trash: [],
   spam: [],
   filters: [],
+  searchText: "",
   filteredMails: [...mailsData],
 };
 

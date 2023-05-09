@@ -12,7 +12,14 @@ export default function FilterMails() {
 
   return (
     <section className="filter-mail">
-      <h4>Filter:</h4>
+      <input
+        type="text"
+        placeholder="Search mail"
+        className="search-input"
+        onChange={(e) =>
+          dispatch({ type: "SEARCH_MAIL", payload: e.target.value })
+        }
+      />
       <div>
         <input
           type="checkbox"
