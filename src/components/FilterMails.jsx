@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons";
+import { faSquare } from "@fortawesome/free-regular-svg-icons";
+import { faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function FilterMails() {
   const { mails, dispatch } = useMails();
@@ -50,6 +52,13 @@ export default function FilterMails() {
         </div>
       </section>
       <section className="select-mails">
+        <label htmlFor="select-all">
+          {mails.isChecked ? (
+            <FontAwesomeIcon icon={faSquareCheck} />
+          ) : (
+            <FontAwesomeIcon icon={faSquare} />
+          )}
+        </label>
         <input
           type="checkbox"
           name="select-all"

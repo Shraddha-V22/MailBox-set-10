@@ -1,3 +1,5 @@
+import { mails as originalData } from "../data/mailData";
+
 export const mailReducer = (state, { type, payload }) => {
   let tempMails = state;
   switch (type) {
@@ -103,7 +105,7 @@ export const mailReducer = (state, { type, payload }) => {
       !tempMails.defaultMails.find(({ mId }) => mId === payload) &&
         tempMails.defaultMails.push(recoveredMail);
 
-      const tempSortedMails = tempMails.defaultMails.filter(({ mId }) =>
+      const tempSortedMails = originalData.filter(({ mId }) =>
         tempMails.defaultMails.find((mail) => mail.mId === mId)
       );
 

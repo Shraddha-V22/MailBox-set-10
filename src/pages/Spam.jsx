@@ -5,8 +5,7 @@ import MailCard from "../components/MailCard";
 export default function Spam() {
   const { mails } = useMails();
   return (
-    <section>
-      <h1>Spam</h1>
+    <section className="emails-section">
       <section>
         {mails?.spam.length > 0 ? (
           mails?.spam.map((mail) => (

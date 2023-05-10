@@ -85,10 +85,10 @@ export default function MailCard({ mail, isSpam, isDeleted }) {
           )}
         </button>
 
-        <h3>
-          {subject.length > 100 ? subject.substr(0, 100) + "..." : subject}
-        </h3>
-        <p>{content.length > 100 ? content.substr(0, 100) + "..." : content}</p>
+        <h3>{subject.length > 25 ? subject.substr(0, 25) + "..." : subject}</h3>
+        <p className="mail-content">
+          {content.length > 80 ? content.substr(0, 80) + "..." : content}
+        </p>
       </div>
       <div className={`mail--btns ${hovered ? "" : "hide-element"}`}>
         {!isSpam && !isDeleted && (
@@ -108,7 +108,12 @@ export default function MailCard({ mail, isSpam, isDeleted }) {
                 <FontAwesomeIcon icon={faEnvelopeOpen} title="already read" />
               )}
             </button>
-            <button onClick={() => dispatch({ type: "SPAM", payload: mId })}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch({ type: "SPAM", payload: mId });
+              }}
+            >
               <FontAwesomeIcon
                 icon={faCircleExclamation}
                 title="move to spam"

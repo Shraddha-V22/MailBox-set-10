@@ -1,8 +1,23 @@
+:root {
+  --light-gray-cl: #5b5a5a;
+  --lighter-gray-cl: #747373;
+  --lightest-gray-cl: #c2c2c2;
+
+  --email-sec-bg: #2c2c2c;
+  --read-mail-bg: #1d1d1d;
+}
+
 *,
 *::after,
 *::before {
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  background-color: #202124;
+  color: #fff;
+  font-family: sans-serif;
 }
 
 .read-the-docs {
@@ -24,8 +39,6 @@
 
 .header {
   grid-area: header;
-  /* border-bottom: 1px solid; */
-  /* padding: 0.5rem 1rem; */
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -38,21 +51,20 @@
   padding: 2rem 1rem;
   gap: 1rem;
   font-size: 1.2rem;
-  border-right: 1px solid;
 }
 
 .aside h1 {
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 1rem;
 }
 
 .aside a {
-  color: initial;
+  color: inherit;
   padding: 0.2rem 1rem;
   border-radius: 0.5rem;
 }
 
 .styleActiveLink {
-  background-color: #e9e9e9;
+  background-color: var(--light-gray-cl);
 }
 
 .main {
@@ -62,16 +74,6 @@
 .filter-comp {
   width: 100%;
 }
-/* 
-div.checkbox-btn {
-  width: 15px;
-  height: 15px;
-  border: 2px solid #888;
-} */
-/* 
-input[type="checkbox"] {
-  border: 1px #000;
-} */
 
 .filter-mail,
 .select-mails {
@@ -80,37 +82,51 @@ input[type="checkbox"] {
   gap: 1rem;
   padding: 0.8rem 1rem;
   align-items: center;
-  border-bottom: 1px solid;
+  /* border-bottom: 1px solid; */
 }
 
 .filter-mail .search-input {
   padding: 1rem;
   border: none;
   outline: none;
-  background-color: #e9e9e9;
+  background-color: var(--lighter-gray-cl);
   border-radius: 0.5rem;
   width: 300px;
   font-size: 1rem;
+  color: #fff;
+}
+
+.filter-mail .search-input::placeholder {
+  color: #fff;
 }
 
 .filter-mail input {
   margin-right: 0.2rem;
 }
 
+.select-mails #select-all {
+  display: none;
+}
+
 .select-mails {
-  padding-left: 2rem;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding: 1.5rem 1.3rem;
+  border-radius: 1rem 1rem 0 0;
+  background-color: var(--email-sec-bg);
+  color: var(--lightest-gray-cl);
 }
 
 .emails-section {
-  padding: 1rem;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .mail-card {
-  border: 1px solid #e9e9e9;
-  border-radius: 0.5rem;
+  border-top: 1px solid var(--light-gray-cl);
+  background-color: var(--read-mail-bg);
   padding: 1rem;
   position: relative;
   display: flex;
@@ -118,8 +134,13 @@ input[type="checkbox"] {
   gap: 1rem;
 }
 
+.mail-card:last-child {
+  border-radius: 0 0 1rem 1rem;
+}
+
 .mail-card:hover {
   cursor: pointer;
+  box-shadow: 0 0 5px 0 var(--lighter-gray-cl);
 }
 
 .mail-card > div.mail-title {
@@ -129,13 +150,17 @@ input[type="checkbox"] {
   gap: 1rem;
 }
 
+.mail-card > div.mail-title p.mail-content {
+  color: var(--lightest-gray-cl);
+}
+
 .mail--btns {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   position: absolute;
-  bottom: 0.3rem;
+  bottom: 1rem;
   right: 1rem;
 }
 
@@ -144,10 +169,73 @@ input[type="checkbox"] {
 }
 
 .unread {
-  background-color: #e9e9e9;
+  background-color: var(--email-sec-bg);
 }
 
 .mail--btns > div {
   display: flex;
   gap: 0.5rem;
+}
+
+.mail--btns > div > button,
+.mail-card > div.mail-title > button {
+  color: var(--lightest-gray-cl);
+}
+
+.mail--btns > div > button:hover,
+.mail-card > div.mail-title > button:hover {
+  color: #fff;
+}
+
+/* mail-details */
+.mail-details {
+  margin-inline: 1rem;
+  padding: 1rem;
+  background-color: var(--read-mail-bg);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+}
+
+.mail-details .subject {
+  margin-left: 4rem;
+  padding-block: 1rem;
+  font-size: 1.5rem;
+}
+
+.mail-details > div:nth-child(2) {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding-block: 0.5rem;
+}
+
+.mail-details > div .avatar {
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--light-gray-cl);
+  border-radius: 50%;
+}
+
+.mail-details .mail-content {
+  margin-left: 4rem;
+  padding-top: 1rem;
+  line-height: 2rem;
+  letter-spacing: 0.05rem;
+  word-spacing: 0.2rem;
+  max-width: 500px;
+}
+
+.mail-details .btns {
+  margin-left: 4rem;
+  padding-block: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.mail-details .btns > button {
+  color: inherit;
+  border: 1px solid;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  text-transform: capitalize;
 }
