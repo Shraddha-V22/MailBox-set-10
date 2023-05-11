@@ -141,26 +141,117 @@ export const mailReducer = (state, { type, payload }) => {
       c;
     case "SELECT_MAILS":
       // console.log(payload);
-      if (payload.name === "select-all") {
-        tempMails = {
-          ...tempMails,
-          isChecked: payload.checked,
-          defaultMails: tempMails.defaultMails.map((mail) => ({
-            ...mail,
-            isChecked: payload.checked,
-          })),
-        };
-      } else {
-        tempMails = {
-          ...tempMails,
-          defaultMails: tempMails.defaultMails.map((mail) =>
-            payload === mail.mId
-              ? { ...mail, isChecked: !mail.isChecked }
-              : mail
-          ),
-        };
+      // if (payload.name === "select-all") {
+      //   tempMails = {
+      //     ...tempMails,
+      //     isChecked: payload.checked,
+      //     defaultMails: tempMails.defaultMails.map((mail) => ({
+      //       ...mail,
+      //       isChecked: payload.checked,
+      //     })),
+      //   };
+      // } else {
+      //   tempMails = {
+      //     ...tempMails,
+      //     defaultMails: tempMails.defaultMails.map((mail) =>
+      //       payload === mail.mId
+      //         ? { ...mail, isChecked: !mail.isChecked }
+      //         : mail
+      //     ),
+      //   };
+      // }
+      switch (payload) {
+        case "all":
+          console.log(payload, "inside");
+          tempMails = {
+            ...tempMails,
+            isChecked: true,
+            defaultMails: tempMails.defaultMails.map((mail) => ({
+              ...mail,
+              isChecked: true,
+            })),
+          };
+          break;
+        case "none":
+          console.log(payload, "inside");
+          tempMails = {
+            ...tempMails,
+            isChecked: false,
+            defaultMails: tempMails.defaultMails.map((mail) => ({
+              ...mail,
+              isChecked: false,
+            })),
+          };
+          break;
+        case "read":
+          console.log(payload, "inside");
+          tempMails = {
+            ...tempMails,
+            isChecked: false,
+            defaultMails: tempMails.defaultMails.reduce(
+              (acc, mail) =>
+                !mail.unread
+                  ? [...acc, { ...mail, isChecked: true }]
+                  : [...acc, { ...mail, isChecked: false }],
+              []
+            ),
+          };
+          break;
+        case "unread":
+          console.log(payload, "inside");
+          tempMails = {
+            ...tempMails,
+            isChecked: false,
+            defaultMails: tempMails.defaultMails.reduce(
+              (acc, mail) =>
+                mail.unread
+                  ? [...acc, { ...mail, isChecked: true }]
+                  : [...acc, { ...mail, isChecked: false }],
+              []
+            ),
+          };
+          break;
+        case "starred":
+          console.log(payload, "inside");
+          tempMails = {
+            ...tempMails,
+            isChecked: false,
+            defaultMails: tempMails.defaultMails.reduce(
+              (acc, mail) =>
+                mail.isStarred
+                  ? [...acc, { ...mail, isChecked: true }]
+                  : [...acc, { ...mail, isChecked: false }],
+              []
+            ),
+          };
+          break;
+        case "unstarred":
+          console.log(payload, "inside");
+          tempMails = {
+            ...tempMails,
+            isChecked: false,
+            defaultMails: tempMails.defaultMails.reduce(
+              (acc, mail) =>
+                !mail.isStarred
+                  ? [...acc, { ...mail, isChecked: true }]
+                  : [...acc, { ...mail, isChecked: false }],
+              []
+            ),
+          };
+          break;
+        default:
+          tempMails = {
+            ...tempMails,
+            defaultMails: tempMails.defaultMails.map((mail) =>
+              payload === mail.mId
+                ? { ...mail, isChecked: !mail.isChecked }
+                : mail
+            ),
+          };
+          break;
       }
-      // console.log(tempMails.defaultMails);
+      console.log(payload);
+
       break;
     default:
       break;

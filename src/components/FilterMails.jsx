@@ -8,13 +8,23 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons";
 import { faSquare } from "@fortawesome/free-regular-svg-icons";
 import { faSquareCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { useRef } from "react";
 
 export default function FilterMails() {
   const { mails, dispatch } = useMails();
+  const selectRef = useRef(null);
 
   const selectedMails = mails.defaultMails.filter(({ isChecked }) => isChecked);
 
-  // console.log(selectedMails);
+  const handleSelectFilter = () => {
+    selectRef.current.classList.toggle("hide-element");
+  };
+
+  const handleFilter = (filterCategory) => {
+    dispatch({ type: "SELECT_MAILS", payload: filterCategory });
+    handleSelectFilter();
+  };
 
   const filterInputHandler = (e) => {
     const { name, checked } = e.target;
@@ -52,24 +62,34 @@ export default function FilterMails() {
         </div>
       </section>
       <section className="select-mails">
-        <label htmlFor="select-all">
-          {mails.isChecked ? (
+        {mails.isChecked ? (
+          <div
+            onClick={() => dispatch({ type: "SELECT_MAILS", payload: "none" })}
+          >
             <FontAwesomeIcon icon={faSquareCheck} />
-          ) : (
+          </div>
+        ) : (
+          <div
+            onClick={() => dispatch({ type: "SELECT_MAILS", payload: "all" })}
+          >
             <FontAwesomeIcon icon={faSquare} />
-          )}
-        </label>
-        <input
-          type="checkbox"
-          name="select-all"
-          id="select-all"
-          onChange={(e) =>
-            dispatch({
-              type: "SELECT_MAILS",
-              payload: { name: e.target.name, checked: e.target.checked },
-            })
-          }
-        />
+          </div>
+        )}
+        <div className="filter-section">
+          <div className="filter-select" onClick={handleSelectFilter}>
+            <FontAwesomeIcon icon={faCaretDown} />
+          </div>
+          <div className="filter-list hide-element" ref={selectRef}>
+            <ul className="filter-categories-list">
+              <li onClick={() => handleFilter("all")}>all</li>
+              <li onClick={() => handleFilter("none")}>none</li>
+              <li onClick={() => handleFilter("read")}>read</li>
+              <li onClick={() => handleFilter("unread")}>unread</li>
+              <li onClick={() => handleFilter("starred")}>starred</li>
+              <li onClick={() => handleFilter("unstarred")}>unstarred</li>
+            </ul>
+          </div>
+        </div>
         {(mails.isChecked || selectedMails.length > 0) && (
           <section className="flex">
             <FontAwesomeIcon

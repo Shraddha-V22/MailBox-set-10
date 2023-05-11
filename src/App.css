@@ -104,10 +104,6 @@ body {
   margin-right: 0.2rem;
 }
 
-.select-mails #select-all {
-  display: none;
-}
-
 .select-mails {
   width: auto;
   margin-left: 1rem;
@@ -116,6 +112,38 @@ body {
   border-radius: 1rem 1rem 0 0;
   background-color: var(--email-sec-bg);
   color: var(--lightest-gray-cl);
+}
+
+.select-mails #select-all {
+  display: none;
+}
+
+.filter-section {
+  position: relative;
+}
+
+.filter-section ul.filter-categories-list {
+  list-style-type: none;
+  border: 1px solid var(--light-gray-cl);
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  text-transform: capitalize;
+  background-color: var(--light-gray-cl);
+}
+
+.filter-section ul.filter-categories-list li {
+  padding: 0.5rem 1.5rem;
+}
+
+.filter-section ul.filter-categories-list li:hover {
+  background-color: var(--lighter-gray-cl);
+}
+
+.filter-list {
+  position: absolute;
+  z-index: 1;
+  /* top: 0; */
 }
 
 .emails-section {

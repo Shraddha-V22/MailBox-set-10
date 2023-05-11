@@ -124,7 +124,9 @@ export default function MailCard({ mail, isSpam, isDeleted }) {
         {isSpam && (
           <div>
             <button onClick={recoverMail}>Move to Inbox</button>
-            <FontAwesomeIcon icon={faTrash} title="move to trash" />
+            <button onClick={(e) => deleteMail(e)}>
+              <FontAwesomeIcon icon={faTrash} title="move to trash" />
+            </button>
           </div>
         )}
         {isDeleted && (
